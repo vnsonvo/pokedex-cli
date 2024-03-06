@@ -14,6 +14,11 @@ func callbackCatch(confg *config, args ...string) error {
 	}
 
 	pokemonName := args[0]
+	_, ok := confg.caughtPokemon[pokemonName]
+	if ok {
+		fmt.Printf("Pokemon %s was caught before\n", pokemonName)
+		return nil
+	}
 
 	pokemon, err := confg.pokeapiClient.GetPokemon(pokemonName)
 	if err != nil {
@@ -28,6 +33,7 @@ func callbackCatch(confg *config, args ...string) error {
 		return fmt.Errorf("failed to catch %s", pokemonName)
 	}
 
+	confg.caughtPokemon[pokemonName] = pokemon
 	fmt.Printf("%s was caught!\n", pokemonName)
 	return nil
 }
